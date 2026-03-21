@@ -6,15 +6,23 @@ If you're an advanced tmux user, you might be running multiple tmux servers at
 the same time. Maybe you start the first tmux server with `$ tmux` and then
 later another one with e.g. `$ tmux -S/tmp/foo`.
 
-You probably don't want to "auto restore" the same environment in the second
-tmux that uses `/tmp/foo` socket. You also probably don't want two tmux
-environments both having "auto save" feature on (think about overwrites).
+You probably don't want the second tmux server using `/tmp/foo` to auto-restore
+the same environment. You also probably don't want multiple servers auto-saving
+into the same resurrect directory.
 
-This plugin handles multi-server scenario by giving precedence to the tmux
-server that was first started.
+This plugin handles multiple servers by checking each server's
+`@resurrect-dir`.
 
-In the above example, the server started with `$ tmux` will do "auto
-restore" (if enabled) and will start "auto saving".
-"Auto restore" or "auto saving" **will not** happen for the second server that
-was started later with the `$ tmux -S/tmp/foo` command. The plugin will
-detect the presence of another server (`$ tmux`) and give it precedence.
+In the above example, if both servers use the same `@resurrect-dir`, the first
+server started with `$ tmux` gets auto-restore (if enabled) and auto-save. The
+later server started with `$ tmux -S/tmp/foo` gets neither.
+
+If tmux servers use different `@resurrect-dir` values, they can auto-save
+independently because they no longer target the same location.
+
+An example to keep a separate save directory for each socket:
+
+```tmux
+set-option -sF @socket-name "#{b:socket_path}"
+set-option -gF @resurrect-dir "$HOME/.local/state/tmux/resurrect/#{@socket-name}"
+```

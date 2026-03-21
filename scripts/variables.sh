@@ -3,6 +3,7 @@ SUPPORTED_VERSION="1.9"
 # these tmux options contain paths to tmux resurrect save and restore scripts
 resurrect_save_path_option="@resurrect-save-script-path"
 resurrect_restore_path_option="@resurrect-restore-script-path"
+resurrect_dir_option="@resurrect-dir"
 
 auto_save_interval_option="@continuum-save-interval"
 auto_save_interval_default="15"

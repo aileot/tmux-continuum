@@ -68,9 +68,8 @@ main() {
 		handle_tmux_automatic_start
 
 		# Advanced edge case handling: start auto-saving only if this is the
-		# only tmux server. We don't want saved files from more environments to
-		# overwrite each other.
-		if ! another_tmux_server_running; then
+		# only tmux server or if this server saves into a distinct resurrect dir.
+		if ! another_tmux_server_running || current_server_has_unique_resurrect_dir; then
 			# give user a chance to restore previously saved session
 			delay_saving_environment_on_first_plugin_load
 			add_resurrect_save_interpolation
